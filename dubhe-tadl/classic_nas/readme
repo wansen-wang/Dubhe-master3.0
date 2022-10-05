@@ -1,0 +1,64 @@
+stage1:python trainer.py --trial_id=1 --model_selected_space_path='./exp/train/2/model_selected_space.json' --search_space_path='./search_space.json' --result_path='./exp/train/2/result.json'
+stage2:python selector.py --experiment_dir='./exp' --best_selected_space_path='./best_selected_space.json'
+stage3:python retrainer.py --best_checkpoint_dir='experiment_id/' --best_selected_space_path='./best_selected_space.json'  --result_path='result.json'
+search_space.json:
+{
+  "first_conv": {
+    "_type": "layer_choice",
+    "_value": [
+      "conv5x5",
+      "conv3x3"
+    ]
+  },
+  "mid_conv": {
+    "_type": "layer_choice",
+    "_value": [
+      "0",
+      "1"
+    ]
+  },
+  "skip": {
+    "_type": "input_choice",
+    "_value": {
+      "candidates": [
+        "",
+        ""
+      ],
+      "n_chosen": 1
+    }
+  }
+}
+
+
+selected_space.json:
+{
+  "first_conv": {
+    "_idx": 0,
+    "_value": "conv5x5"
+  },
+  "mid_conv": {
+    "_idx": 0,
+    "_value": "0"
+  },
+  "skip": {
+    "_idx": [
+      0
+    ],
+    "_value": [
+      ""
+    ]
+  }
+}
+
+result.json:
+{'type': 'accuracy', 'result': {'sequence': 1, 'category': 'epoch', 'value': 96.73815907059875}}
+{'type': 'accuracy', 'result': {'sequence': 2, 'category': 'epoch', 'value': 97.6988382484361}}
+{'type': 'accuracy', 'result': {'sequence': 3, 'category': 'epoch', 'value': 98.63717605004469}}
+{'type': 'accuracy', 'result': {'sequence': 4, 'category': 'epoch', 'value': 98.72654155495978}}
+{'type': 'accuracy', 'result': {'sequence': 5, 'category': 'epoch', 'value': 99.27390527256479}}
+{'type': 'accuracy', 'result': {'sequence': 6, 'category': 'epoch', 'value': 99.13985701519213}}
+{'type': 'accuracy', 'result': {'sequence': 7, 'category': 'epoch', 'value': 99.3632707774799}}
+{'type': 'accuracy', 'result': {'sequence': 8, 'category': 'epoch', 'value': 99.4414655942806}}
+{'type': 'accuracy', 'result': {'sequence': 9, 'category': 'epoch', 'value': 99.67605004468275}}
+{'type': 'accuracy', 'result': {'sequence': 10, 'category': 'epoch', 'value': 99.74307417336908}}
+

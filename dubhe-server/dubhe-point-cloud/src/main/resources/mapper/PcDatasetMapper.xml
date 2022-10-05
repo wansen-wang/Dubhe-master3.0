@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.dubhe.pointcloud.dao.PcDatasetMapper">
+    <update id="updateStatusByBatchIds">
+        update `pc_dataset` set deleted = #{deleteFlag}
+        where id in
+        <foreach collection="coll" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+    <update id="updateStatusById">
+        update `pc_dataset` set deleted = #{deleteFlag} where id = #{id}
+    </update>
+
+    <select id="getDetails" resultType="org.dubhe.pointcloud.domain.dto.DatasetDetailDTO">
+        select
+        dataset.id,
+        dataset.name,
+        label.name as label_group_name,
+        dataset.remark,
+        dataset.scope_left,
+        dataset.scope_right,
+        dataset.scope_front,
+        dataset.scope_behind,
+        detail.algorithm_id,
+        detail.algorithm_name,
+        detail.algorithm_source,
+        detail.dataset_dir_mapping,
+        detail.model_id,
+        detail.model_branch_id,
+        detail.model_resource,
+        detail.model_name,
+        detail.model_version,
+        detail.image_name,
+        detail.dataset_dir_mapping,
+        detail.image_tag,
+        detail.pool_specs_info,
+        detail.resources_pool_node,
+        detail.resources_pool_type,
+        detail.resources_pool_specs,
+        detail.model_dir_mapping,
+        detail.result_dir_mapping,
+        detail.command
+        from pc_dataset dataset
+        left join pc_annotation_detail detail on dataset.id = detail.dataset_id
+        left join data_label_group label on label.id = dataset.label_group_id
+        where dataset.id = #{id}
+        and dataset.deleted = 0
+        <if test="createUserId != null">
+            and dataset.create_user_id = #{createUserId}
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: videosample
+  namespace: algorithm-open
+spec:
+  selector:
+    matchLabels:
+      app: videosample
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: videosample
+    spec:
+      terminationGracePeriodSeconds: 1200
+      containers:
+      - name: videosample
+        image: harbor.dubhe.ai/dataset/videosample:v1
+        imagePullPolicy: IfNotPresent
+        lifecycle:
+          preStop:
+            exec:
+              command: ["test","-e","/root/.startup"]
+        command: ["/bin/bash","-c","cd /dubhe_data_process && python main.py videosample False 127.0.0.1,6379,10,'Tianshu@123'"]
+        volumeMounts:
+        - name: videosample-fs
+          mountPath: /nfs
+        - name: dubhe-data-process
+          mountPath: /dubhe_data_process  
+        ports:
+        - containerPort: 9898
+          protocol: TCP
+      volumes:
+      - name: videosample-fs
+        hostPath: 
+          path: /nfs
+          type: Directory
+      - name: dubhe-data-process
+        hostPath:
+          path: /dubhe_data_process
+          type: Directory      

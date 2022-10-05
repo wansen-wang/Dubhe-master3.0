@@ -1,0 +1,27 @@
+#开启熔断机制
+feign:
+  hystrix:
+    enabled: true
+# 配置Sharding-JDBC数据源名称，可配置多个
+spring:
+  shardingsphere:
+    #指定pc_dataset_file的分表生成策略
+    sharding:
+      tables:
+        pc_dataset_file:
+          actual-data-nodes: master.pc_dataset_file_$->{1..200}
+          key-generator:
+            column: id
+            # SNOWFLAKE 雪花算法生成的id
+            type: SNOWFLAKE
+          table-strategy:
+            standard:
+              sharding-column: dataset_id
+              precise-algorithm-class-name: org.dubhe.pointcloud.util.PointCloudPreciseShardingAlgorithm
+  # 配置允许后面的Bean覆盖前面名称重复的Bean
+  main:
+    allow-bean-definition-overriding: true
+# 可匿名访问路径
+security:
+  permitAll:
+    matchers: /api/k8s/callback/pod/pointcloud

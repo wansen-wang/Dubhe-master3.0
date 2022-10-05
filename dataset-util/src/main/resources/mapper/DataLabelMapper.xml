@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.dubhe.datasetutil.dao.DataLabelMapper">
+    <insert id="saveBatchDataLabel" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        insert into data_label (`name`,color,create_user_id)
+        values
+        <foreach collection="listDataLabel" item="dataLabel" separator=",">
+            ( #{dataLabel.name},#{dataLabel.color},#{dataLabel.createUserId})
+        </foreach>
+    </insert>
+
+    <select id="getPresetLabelList" parameterType="java.util.List"
+            resultType="org.dubhe.datasetutil.domain.entity.DataLabel">
+        select dl.id,dl.name from data_label  dl
+        left join  data_group_label dgl on dl.id = dgl.label_id
+        left join data_label_group dlg on dgl.label_group_id = dlg.id
+        where dl.deleted = 0
+        <if test="groupIds!=null and groupIds.size()&gt; 0">
+            <foreach collection="groupIds" item="item" separator="," open="and dlg.id in(" close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+</mapper>

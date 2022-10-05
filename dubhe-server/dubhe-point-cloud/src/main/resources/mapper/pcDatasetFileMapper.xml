@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.dubhe.pointcloud.dao.PcDatasetFileMapper">
+    <insert id="batchInsert">
+        insert into pc_dataset_file
+        (
+        id,
+        name,
+        file_type,
+        difficulty,
+        dataset_id,
+        url,
+        mark_status,
+        mark_file_name,
+        mark_file_url,
+        create_user_id
+        ) values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.id},
+            #{item.name},
+            #{item.fileType},
+            #{item.difficulty},
+            #{item.datasetId},
+            #{item.url},
+            #{item.markStatus},
+            #{item.markFileName},
+            #{item.markFileUrl},
+            #{item.createUserId}
+            )
+        </foreach>
+    </insert>
+    <update id="updateDeleteByBatchIds">
+            update `pc_dataset_file` set deleted = 1
+            where id in
+            <foreach collection="coll" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+
+    </update>
+    <update id="updateDeleteByBatchDatasetIds">
+        update `pc_dataset_file` set deleted = 1
+        where dataset_id in
+        <foreach collection="coll" item="datasetId" index="index" open="(" close=")" separator=",">
+            #{datasetId}
+        </foreach>
+    </update>
+    <update id="updateBatchByEntityAndDatasetId">
+      update `pc_dataset_file`
+      <trim prefix="set" suffixOverrides=",">
+          <trim prefix="mark_file_name = case id" suffix="end,">
+          <foreach collection="list" item="item">
+              when #{item.id}
+              then #{item.markFileName}
+          </foreach>
+          </trim>
+
+          <trim prefix="mark_file_url = case id" suffix="end,">
+              <foreach collection="list" item="item">
+                  when #{item.id}
+                  then #{item.markFileUrl}
+              </foreach>
+          </trim>
+
+          <trim prefix="mark_status = case id" suffix="end">
+              <foreach collection="list" item="item">
+                  when #{item.id}
+                  then #{item.markStatus}
+              </foreach>
+          </trim>
+      </trim>
+      where dataset_id = #{datasetId}
+      AND id in
+      <foreach collection="list" item="item" separator="," open="(" close=")">
+          #{item.id}
+      </foreach>
+
+    </update>
+    <update id="updateStatusByDatasetId">
+        update `pc_dataset_file` set deleted = #{deleteFlag}
+        where dataset_id =#{datasetId}
+    </update>
+
+    <update id="createNewTable">
+       CREATE TABLE ${tableName} like ${oldTableName}
+    </update>
+
+
+    <select id="queryFileList" resultType="org.dubhe.pointcloud.domain.entity.PcDatasetFile">
+        select * from pc_dataset_file
+        where dataset_id = #{datasetId}
+        <if test="fileId != null">
+            and id = #{fileId}
+        </if>
+        <if test="difficulty != null">
+            and difficulty = #{difficulty}
+        </if>
+        <if test="fileType != null">
+            and file_type = #{fileType}
+        </if>
+        <if test="createUserId != null">
+            and create_user_id = #{createUserId}
+        </if>
+        <if test="markStatus != null">
+            and mark_status in
+            <foreach collection="markStatus" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY name asc
+    </select>
+    <select id="checkTableExist" resultType="java.lang.Integer">
+         select count(1) from ${tableName}
+    </select>
+
+</mapper>

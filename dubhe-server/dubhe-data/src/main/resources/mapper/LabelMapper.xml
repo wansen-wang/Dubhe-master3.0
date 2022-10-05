@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.dubhe.data.dao.LabelMapper">
+    <select id="batchListByIds" resultType="org.dubhe.data.domain.entity.Label">
+        select
+            label.id,
+            label.name,
+            label.color,
+            label.create_user_id,
+            label.create_time,
+            label.update_user_id,
+            label.update_time,
+            label.deleted,
+            label.type
+        from
+            data_dataset_label dataset_label inner join data_label label on dataset_label.label_id = label.id
+        where dataset_label.dataset_id = #{datasetId} and label.deleted!=1
+    </select>
+
+    <update id="updateStatusByLabelIds">
+        update data_label  set
+        deleted = #{deleteFlag}
+        where id in
+        <foreach collection="labelIds" item="labelId" separator="," open="(" close=")">
+            #{labelId}
+        </foreach>
+
+    </update>
+
+</mapper>

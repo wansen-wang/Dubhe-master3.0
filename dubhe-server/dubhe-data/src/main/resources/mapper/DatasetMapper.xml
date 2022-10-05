@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.dubhe.data.dao.DatasetMapper">
+    <select id="dataVersionListVO" resultType="org.dubhe.data.domain.vo.DatasetVersionQueryVO">
+        select id, `name` from data_dataset where deleted = 0 and current_version_name is not null
+        <if test="annotateType != null">
+            and annotate_type = #{annotateType}
+        </if>
+        <if test="module != null">
+            and module = #{module}
+        </if>
+        <if test="ids != null and ids.size > 0">
+            and id in
+            <foreach collection="ids" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+        and (type = 2 or origin_user_id = #{currentUserId})
+    </select>
+</mapper>

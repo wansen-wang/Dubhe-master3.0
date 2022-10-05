@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.dubhe.data.dao.AutoLabelModelServiceMapper">
+
+
+    <update id="deleteByIds">
+        delete from auto_label_model_service where 1=1
+        and id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="selectByIds" resultType="org.dubhe.data.domain.entity.AutoLabelModelService">
+        select * from auto_label_model_service where deleted =false
+        and id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </select>
+
+
+    <update id="updataStatusById">
+        UPDATE auto_label_model_service
+        SET status =  #{status}
+        WHERE
+        id = #{id}
+    </update>
+
+</mapper>

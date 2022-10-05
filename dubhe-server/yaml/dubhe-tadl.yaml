@@ -1,0 +1,63 @@
+feign:
+  hystrix:
+    enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 10000
+        readTimeout: 20000
+#tadl模块配置
+tadl:
+  # tadl镜像配置
+  image: "harbor.dubhe.ai/common/0/automl-nas-pytorch17:v1"
+  # docker中数据集路径
+  docker-dataset-path: "/dataset"
+  #  # docker中trial工作路径
+  #  docker-trial-path: "./trial"
+  #  # docker中算法路径
+  docker-algorithm-path: "/algorithm"
+  #  # docker中日志路径
+  #  docker-log-path: "./log"
+  # docker中实验路径
+  docker-experiment-path: "/experiment"
+  path:
+    experiment:
+      # bucketName experimentId
+      experimentPath: "%s/TADL/experiment/%s"
+      # bucketName experimentId
+      algorithm:
+        algorithm: "%s/TADL/experiment/%s/algorithm/TADL"
+        yaml: "%s/TADL/experiment/%s/algorithm/yaml/"
+      # bucketName experimentId
+      systemLogs: "%s/TADL/experiment/%s/systemLogs/"
+      stage:
+        trial:
+          # bucketName experimentId stageName trialId
+          selectSpace: "%s/TADL/experiment/%s/%s/%s/model_selected_space/"
+          # bucketName experimentId stageName trialId
+          result: "%s/TADL/experiment/%s/%s/%s/result/"
+          # bucketName experimentId stageName trialId
+          log: "%s/TADL/experiment/%s/%s/%s/log/"
+        # bucketName experimentId
+        searchSpace: "%s/TADL/experiment/%s/"
+        # bucketName experimentId
+        bestSelectedSpace: "%s/TADL/experiment/%s/"
+        # bucketName experimentId
+        bestCheckpoint: "%s/TADL/experiment/%s/best_checkpoint/"
+        # bucketName experimentId
+        experimentConfig: "%s/TADL/experiment/%s/"
+    # bucketName
+    algorithm:
+      # bucketName algorithmName
+      algorithmPath: "%s/TADL/algorithm/%s"
+      # bucketName algorithmName algorithmName
+      parentYaml: "%s/TADL/algorithm/%s/TADL/pytorch/%s/yaml/"
+      # bucketName algorithmName versionName
+      yaml: "%s/TADL/algorithm/%s/yaml/%s"
+    pytorch:
+      algorithm:
+        yaml: "TADL/pytorch/%s/yaml/"
+# 可匿名访问路径
+security:
+  permitAll:
+    matchers: /api/k8s/callback/pod/tadl

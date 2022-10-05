@@ -1,0 +1,14 @@
+#关闭熔断机制
+feign:
+  hystrix:
+    enabled: false
+
+# serving模块配置
+serving:
+  # 存储服务器中dubhe_serving源码路径
+  sourcePath: "serving/dubhe_serving"
+
+# 可匿名访问路径
+security:
+  permitAll:
+    matchers: /api/k8s/callback/pod/batchserving,/api/k8s/callback/deployment/serving,/api/k8s/callback/pod/serving

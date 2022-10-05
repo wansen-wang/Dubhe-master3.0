@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: imgprocess
+  namespace: algorithm-open
+spec:
+  selector:
+    matchLabels:
+      app: imgprocess
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: imgprocess
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+      - name: imgprocess
+        image: harbor.dubhe.ai/dataset/imgprocess:v1
+        imagePullPolicy: IfNotPresent
+        lifecycle:
+          preStop:
+            exec:
+              command: ["test","-e","/root/.startup"]
+        command: ["/bin/bash","-c","cd /dubhe_data_process && python main.py imgprocess False 127.0.0.1,6379,10,'Tianshu@123'"]
+        volumeMounts:
+        - name: imgprocess-fs
+          mountPath: /nfs
+        - name: dubhe-data-process
+          mountPath: /dubhe_data_process  
+        ports:
+        - containerPort: 9898
+          protocol: TCP
+      volumes:
+      - name: imgprocess-fs
+        hostPath: 
+          path: /nfs
+          type: Directory
+      - name: dubhe-data-process
+        hostPath:
+          path: /dubhe_data_process
+          type: Directory    

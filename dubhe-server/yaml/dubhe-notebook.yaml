@@ -1,0 +1,15 @@
+# 第三方创建的notebook初始化资源配置
+notebook-specs:
+  # cpu数量（核）
+  cpu-num: 1
+  # gpu数量（核）
+  gpu-num: 0
+  # 内存大小（M）
+  mem-num: 1024
+  # 工作空间配额（m）
+  disk-mem-num: 1024
+
+# 可匿名访问路径
+security:
+  permitAll:
+    matchers: /api/k8s/callback/pod/notebook

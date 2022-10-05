@@ -1,0 +1,31 @@
+name: dubhe_visual
+channels:
+  - defaults
+dependencies:
+  - ca-certificates=2021.10.8
+  - openssl=3.0.0
+  - pip=21.3.1
+  - python=3.7.12
+  - python_abi=3.7
+  - setuptools=59.2.0
+  - sqlite=3.36.0
+  - wheel=0.37.0
+  - pip:
+    - absl-py==1.0.0
+    - asgiref==3.4.1
+    - crc32c==2.2.post0
+    - django==3.0.8
+    - django-cors-headers==3.4.0
+    - numpy==1.21.4
+    - pathtools==0.1.2
+    - pillow==7.2.0
+    - protobuf==3.15.0
+    - pytz==2021.3
+    - redis==3.5.3
+    - scipy==1.7.2
+    - six==1.16.0
+    - sqlparse==0.4.2
+    - tsne-mp==0.1.13
+    - typing-extensions==4.0.0
+    - watchdog==0.10.3
+prefix: /root/anaconda3/envs/dubhe_visual

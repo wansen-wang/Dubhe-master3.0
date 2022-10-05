@@ -1,0 +1,17 @@
+absl-py==1.0.0
+asgiref==3.4.1
+crc32c==2.2.post0
+Django==3.0.8
+django-cors-headers==3.4.0
+numpy==1.21.4
+pathtools==0.1.2
+Pillow==7.2.0
+protobuf==3.15.0
+pytz==2021.3
+redis==3.5.3
+scipy==1.7.2
+six==1.16.0
+sqlparse==0.4.2
+tsne-mp==0.1.13
+typing_extensions==4.0.0
+watchdog==0.10.3

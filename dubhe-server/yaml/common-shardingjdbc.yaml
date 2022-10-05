@@ -1,0 +1,18 @@
+# 配置Sharding-JDBC数据源名称，可配置多个
+spring:
+  shardingsphere:
+    datasource:
+      name: master
+      master:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+        url: jdbc:log4jdbc:mysql://127.0.0.1/dubhe-cloud-test?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false&allowMultiQueries=true&useInformationSchema=true
+        username: test
+        password: zj12345678
+      props:
+        sql:
+          show: true
+management:
+  health:
+    db:
+      enabled: false
